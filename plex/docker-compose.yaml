@@ -1,0 +1,20 @@
+version: "3"
+
+volumes:
+  db:
+
+services:
+  plex:
+    container_name: plex
+    image: lscr.io/linuxserver/plex:1.26.1.5798-99a4a6ac9-ls116
+    network_mode: host
+    environment:
+      PUID: 1000
+      PGID: 1000
+      VERSION: docker
+      PLEX_CLAIM: '${PLEX_CLAIM_TOKEN}'
+    volumes:
+      - db:/config
+      # The media volume is mounted as a bind mount.
+      - ${PLEX_MEDIA_HOST_PATH-/home/pi/plexmedia}:/media
+    restart: unless-stopped
