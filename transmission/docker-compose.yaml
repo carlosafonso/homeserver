@@ -1,0 +1,25 @@
+version: "3"
+
+volumes:
+  data:
+  watch:
+
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:3.00-r5-ls125
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+      - USER=${TRANSMISSION_USER-transmission}
+      - PASSWORD=${TRANSMISSION_PASSWORD-transmission}
+    volumes:
+      - data:/config
+      - watch:/watch
+      - ${TRANSMISSION_DOWNLOADS_HOST_PATH-/home/pi/transmission/downloads}:/downloads
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
